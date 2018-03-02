@@ -1,9 +1,9 @@
 apply plugin: 'com.android.library'
+//bintray-release 插件 把库上传到jcenter的相关配置
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
-
-
 
     defaultConfig {
         minSdkVersion 19
@@ -22,18 +22,31 @@ android {
         }
     }
 
+    //忽略代码不符合规范，导致lint检查时报错，中断整个编译过程。
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    implementation "com.android.support:support-v4:26.1.0"
-    implementation 'com.yinzihao:YinAdapter:2.2.0'
-    implementation 'com.yinzihao:YinImageView:2.0.0'
+    implementation 'com.yinzihao:YinAdapter:2.2.1'
+    implementation 'com.yinzihao:YinImageView:2.0.1'
+}
+
+//bintray-release 插件 把库上传到jcenter的相关配置。
+publish {
+    userOrg = 'yinzihaoos'//bintray.com用户名
+    groupId = 'com.yinzihao'//jcenter上的路径
+    artifactId = 'PictureSelector'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'an android pictureSelector'//描述，不重要
+    website = 'https://github.com/YinZiHao1994/PictureSelector'//网站
 }

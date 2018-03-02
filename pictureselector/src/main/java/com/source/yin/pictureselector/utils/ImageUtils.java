@@ -3,6 +3,8 @@ package com.source.yin.pictureselector.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.File;
+
 /**
  * Created by yin on 2018/3/1.
  */
@@ -26,4 +28,21 @@ public class ImageUtils {
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         return BitmapFactory.decodeFile(filePath, options);
     }
+
+    /**
+     * 自动压缩图片为缩略图
+     *
+     * @param filePath
+     * @return
+     */
+    public static Bitmap decodeBitmapFromFileAutoSample(String filePath) {
+        File imageFile = new File(filePath);
+        long mb = imageFile.length() / 1024 / 1024;
+        int sampleSize = 4;
+        if (mb > 0) {
+            sampleSize = (int) (sampleSize * mb);
+        }
+        return decodeSampledBitmapFromFile(filePath, sampleSize);
+    }
+
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PictureSelector</string>
+    <string name="btn_selected_size">确定(%1$d/%2$d)</string>
+    <string name="btn_text">确定</string>
 </resources>

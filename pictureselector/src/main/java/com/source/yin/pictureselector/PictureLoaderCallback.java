@@ -69,19 +69,20 @@ public class PictureLoaderCallback implements LoaderManager.LoaderCallbacks<Curs
             }
 
             boolean isAddToList = false;
+            Picture picture = new Picture(pictureId, path);
             for (PictureDirectory pictureDirectory : pictureDirectories) {
                 if (pictureDirectory.getId().equals(directoryId)) {
-                    pictureDirectory.addPicture(new Picture(pictureId, path));
+                    pictureDirectory.addPicture(picture);
                     isAddToList = true;
                     break;
                 }
             }
             if (!isAddToList) {
-                PictureDirectory pictureDirectory = new PictureDirectory(directoryId, path, directoryName);
-                pictureDirectory.addPicture(new Picture(pictureId, path));
+                PictureDirectory pictureDirectory = new PictureDirectory(directoryId, directoryName, path);
+                pictureDirectory.addPicture(picture);
                 pictureDirectories.add(pictureDirectory);
             }
-            allPictureDirectory.addPicture(new Picture(pictureId, path));
+            allPictureDirectory.addPicture(picture);
         }
         if (allPictureDirectory.getPicturePathList().size() > 0) {
             allPictureDirectory.setCoverPath(allPictureDirectory.getPicturePathList().get(0));

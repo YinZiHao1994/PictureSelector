@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#AA000000</color>
+    <color name="alpha_black">#AA000000</color>
+    <color name="light_gray">#E7E7E7</color>
+    <color name="deep_gray">#CCCCCC</color>
+    <color name="cyan_gray">#808B90</color>
+    <color name="light_cyan_black">#313B45</color>
+    <color name="red">#DD4C4F</color>
+
+
+    <color name="common_text_color">@color/light_gray</color>
+
+
 </resources>

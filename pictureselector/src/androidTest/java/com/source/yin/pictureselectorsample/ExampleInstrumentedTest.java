@@ -1,4 +1,4 @@
-package com.source.yin.pictureselector;
+package com.source.yin.pictureselectorsample;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,5 +1,7 @@
 package com.source.yin.pictureselector.bean;
 
+import android.graphics.Bitmap;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class PictureDirectory {
     private String coverPath;
     private String name;
     private List<Picture> pictures = new ArrayList<>();
+    private Bitmap coverBitmap;
 
     public PictureDirectory(String id, String name) {
         this.id = id;
@@ -23,6 +26,14 @@ public class PictureDirectory {
         this.id = id;
         this.coverPath = coverPath;
         this.name = name;
+    }
+
+    public Bitmap getCoverBitmap() {
+        return coverBitmap;
+    }
+
+    public void setCoverBitmap(Bitmap coverBitmap) {
+        this.coverBitmap = coverBitmap;
     }
 
     public String getId() {
