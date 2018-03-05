@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -26,7 +26,6 @@ android {
     lintOptions {
         abortOnError false
     }
-
 }
 
 dependencies {
@@ -46,7 +45,7 @@ publish {
     userOrg = 'yinzihaoos'//bintray.com用户名
     groupId = 'com.yinzihao'//jcenter上的路径
     artifactId = 'PictureSelector'//项目名称
-    publishVersion = '1.0.5'//版本号
+    publishVersion = '1.1.0'//版本号
     desc = 'an android pictureSelector'//描述，不重要
     website = 'https://github.com/YinZiHao1994/PictureSelector'//网站
 }

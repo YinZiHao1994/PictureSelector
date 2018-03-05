@@ -3,6 +3,7 @@ package com.source.yin.pictureselector.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
@@ -35,7 +36,7 @@ public class ImageUtils {
      * @param filePath
      * @return
      */
-    public static Bitmap decodeBitmapFromFileAutoSample(String filePath) {
+    public static Bitmap decodeBitmapFromFileForPreview(String filePath) {
         File imageFile = new File(filePath);
         long mb = imageFile.length() / 1024 / 1024;
         int sampleSize = 4;
@@ -43,6 +44,44 @@ public class ImageUtils {
             sampleSize = (int) (sampleSize * mb);
         }
         return decodeSampledBitmapFromFile(filePath, sampleSize);
+    }
+
+    /**
+     * 避免过大图片内存溢出
+     *
+     * @param filePath
+     * @return
+     */
+    public static Bitmap decodeBitmapFromFileAutoSimaple(String filePath) {
+        File imageFile = new File(filePath);
+        long mb = imageFile.length() / 1024 / 1024;
+        int sampleSize = 1;
+        if (mb > 1) {
+            sampleSize = (int) (sampleSize * mb);
+        }
+        return decodeSampledBitmapFromFile(filePath, sampleSize);
+    }
+
+    /**
+     * 图片转字节
+     *
+     * @param bmp
+     * @return
+     */
+    public static byte[] bmpToByteArray(Bitmap bmp) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, output);
+//        if (needRecycle) {
+//            bmp.recycle();
+//        }
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }

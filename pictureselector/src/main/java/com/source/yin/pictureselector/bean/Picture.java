@@ -11,7 +11,7 @@ public class Picture implements Checkable {
     private int id;
     private String path;
 
-    private Bitmap bitmap;
+    private Bitmap previewBitmap;
 
     private boolean isChecked;
 
@@ -20,12 +20,12 @@ public class Picture implements Checkable {
         this.path = path;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public void setPreviewBitmap(Bitmap previewBitmap) {
+        this.previewBitmap = previewBitmap;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public Bitmap getPreviewBitmap() {
+        return previewBitmap;
     }
 
     public String getPath() {

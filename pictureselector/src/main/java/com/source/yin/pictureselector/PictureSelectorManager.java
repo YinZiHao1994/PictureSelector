@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
-import com.source.yin.pictureselector.ui.PictureSelectorActivity;
+import com.source.yin.pictureselector.ui.activity.PictureSelectorActivity;
 
 /**
  * Created by yin on 2018/3/2.

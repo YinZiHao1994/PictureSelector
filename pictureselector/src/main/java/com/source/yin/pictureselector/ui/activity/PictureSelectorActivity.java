@@ -1,8 +1,9 @@
-package com.source.yin.pictureselector.ui;
+package com.source.yin.pictureselector.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
@@ -17,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.source.yin.pictureselector.FragmentListener;
 import com.source.yin.pictureselector.PictureLoaderCallback;
 import com.source.yin.pictureselector.R;
 import com.source.yin.pictureselector.adapter.PopupListWindowAdapter;
 import com.source.yin.pictureselector.bean.Picture;
 import com.source.yin.pictureselector.bean.PictureDirectory;
+import com.source.yin.pictureselector.ui.fragment.ImageDialogFragment;
 import com.source.yin.pictureselector.utils.ImageUtils;
 import com.source.yin.yinadapter.BaseAdapter;
 import com.source.yin.yinadapter.CommonViewHolder;
@@ -29,7 +32,7 @@ import com.source.yin.yinadapter.CommonViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PictureSelectorActivity extends AppCompatActivity implements View.OnClickListener {
+public class PictureSelectorActivity extends AppCompatActivity implements View.OnClickListener, FragmentListener {
 
     private RecyclerView recyclerView;
     private TextView tvDirectoryName;
@@ -38,6 +41,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
     private Button btnSure;
     private ListPopupWindow directoryPopupWindow;
     private View directoryNameLayout;
+    private ImageDialogFragment imageDialogFragment;
 
     private List<Picture> pictureList;
     private BaseAdapter<Picture> pictureAdapter;
@@ -52,6 +56,8 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
     private int maxSelectPictureNum;
     //是否包含 gif 图片
     private boolean isContainGif;
+
+    private Picture showInDialogPicture;
 
     public static final String MAX_SELECT_PICTURE_NUM_KEY = "maxSelectPictureNum";
     public static final String IS_CONTAIN_GIF_KEY = "isContainGifKey";
@@ -101,7 +107,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 ImageView image = viewHolder.getView(R.id.image);
                 Bitmap bitmap = data.getCoverBitmap();
                 if (bitmap == null) {
-                    bitmap = ImageUtils.decodeBitmapFromFileAutoSample(data.getCoverPath());
+                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getCoverPath());
                 }
                 data.setCoverBitmap(bitmap);
                 image.setImageBitmap(bitmap);
@@ -129,17 +135,21 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 checkBox.setOnCheckedChangeListener(new ImageCheckBoxListener(data, position));
 
                 checkBox.setChecked(data.isChecked());
-                Bitmap bitmap = data.getBitmap();
+                Bitmap bitmap = data.getPreviewBitmap();
                 if (bitmap == null) {
-                    bitmap = ImageUtils.decodeBitmapFromFileAutoSample(data.getPath());
-                    data.setBitmap(bitmap);
+                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getPath());
+                    data.setPreviewBitmap(bitmap);
                 }
                 imageView.setImageBitmap(bitmap);
             }
 
             @Override
             public void onItemClick(CommonViewHolder commonViewHolder, View view, Picture data, int position) {
-
+                Bitmap bitmap = ImageUtils.decodeBitmapFromFileAutoSimaple(data.getPath());
+                showInDialogPicture = data;
+                imageDialogFragment = ImageDialogFragment.instance(bitmap);
+                imageDialogFragment.setFragmentListener(PictureSelectorActivity.this);
+                imageDialogFragment.show(getSupportFragmentManager(), "dialog");
             }
 
             @Override
@@ -217,6 +227,17 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
         if (directoryPopupWindow != null) {
             directoryPopupWindow.setHeight(showDirectoryCount * getResources().getDimensionPixelOffset(R.dimen.directory_popup_window_item_height));
         }
+    }
+
+    @Override
+    public void onFragmentSendMessage(Message message) {
+        int what = message.what;
+        //暂时不做
+//        if (what == ImageDialogFragment.MESSAGE_WHAT_SURE) {
+//            if (showInDialogPicture != null) {
+//                showInDialogPicture.setChecked(true);
+//            }
+//        }
     }
 
     private class ImageCheckBoxListener implements CompoundButton.OnCheckedChangeListener {

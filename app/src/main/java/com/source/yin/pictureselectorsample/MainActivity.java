@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.source.yin.pictureselector.PictureSelectorManager;
-import com.source.yin.pictureselector.ui.PictureSelectorActivity;
+import com.source.yin.pictureselector.ui.activity.PictureSelectorActivity;
 import com.source.yin.pictureselector.utils.ImageUtils;
 import com.source.yin.yinadapter.BaseAdapter;
 import com.source.yin.yinadapter.CommonViewHolder;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataBind(CommonViewHolder viewHolder, String data, int position) {
                 ImageView imageView = viewHolder.getImageView(R.id.image);
-                imageView.setImageBitmap(ImageUtils.decodeBitmapFromFileAutoSample(data));
+                imageView.setImageBitmap(ImageUtils.decodeBitmapFromFileForPreview(data));
             }
 
             @Override
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         adapter.notifyDataSetChanged();
                         break;
                 }
+
                 break;
 
         }
