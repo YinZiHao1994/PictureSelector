@@ -6,10 +6,10 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -38,7 +38,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation 'com.yinzihao:YinAdapter:2.2.1'
-    implementation 'com.yinzihao:YinImageView:2.0.1'
+    implementation 'com.yinzihao:YinImageView:2.0.2'
 }
 
 //bintray-release 插件 把库上传到jcenter的相关配置。
@@ -46,7 +46,7 @@ publish {
     userOrg = 'yinzihaoos'//bintray.com用户名
     groupId = 'com.yinzihao'//jcenter上的路径
     artifactId = 'PictureSelector'//项目名称
-    publishVersion = '1.0.0'//版本号
+    publishVersion = '1.0.2'//版本号
     desc = 'an android pictureSelector'//描述，不重要
     website = 'https://github.com/YinZiHao1994/PictureSelector'//网站
 }
