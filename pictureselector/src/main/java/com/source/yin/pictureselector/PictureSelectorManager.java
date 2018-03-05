@@ -18,6 +18,7 @@ import com.source.yin.pictureselector.ui.PictureSelectorActivity;
 public class PictureSelectorManager {
 
     public static final int REQUEST_CODE_SELECT_PICTURE = 1011;
+    public static final String SELECTED_PICTURE_LIST_KEY = PictureSelectorActivity.SELECTED_PICTURE_LIST_KEY;
 
     public static PictureSelectorManagerBuilder builder() {
         return new PictureSelectorManagerBuilder();

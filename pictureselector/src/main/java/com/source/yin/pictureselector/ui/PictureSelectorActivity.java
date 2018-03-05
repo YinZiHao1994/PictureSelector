@@ -253,8 +253,11 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
     private void selectedPictureListChange(int currentSize) {
         if (currentSize > 0) {
             btnSure.setEnabled(true);
-            btnSure.setText(getString(R.string.btn_selected_size, currentSize, maxSelectPictureNum));
+            //todo 作为库使用的时候 selector 形式设置 color enable 状态下不起作用，只能先通过手动变换颜色的方法实现
+            btnSure.setTextColor(getResources().getColor(R.color.light_gray));
+            btnSure.setText(getString(R.string.btn_selected_picture, currentSize, maxSelectPictureNum));
         } else {
+            btnSure.setTextColor(getResources().getColor(R.color.cyan_gray));
             btnSure.setEnabled(false);
             btnSure.setText(getString(R.string.btn_text));
         }

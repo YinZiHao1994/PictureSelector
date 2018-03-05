@@ -39,9 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/selector_button_background"
-            android:enabled="false"
+            android:enabled="true"
+            android:gravity="center"
             android:text="@string/btn_text"
             android:textColor="@color/selector_common_enable_text_color" />
     </RelativeLayout>
@@ -64,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:gravity="center_vertical"
+            android:paddingLeft="20dp"
             android:paddingStart="20dp">
 
             <ImageView
@@ -76,9 +79,11 @@
                 style="@style/CommonTextView"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
                 android:gravity="center"
                 android:paddingEnd="20dp"
+                android:paddingRight="20dp"
                 tools:text="全部" />
 
         </LinearLayout>
