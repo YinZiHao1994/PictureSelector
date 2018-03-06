@@ -6,7 +6,7 @@ compile 'com.yinzihao:PictureSelector:{latest_version}'
 
 # 使用指南
 
-##直接集成
+## 直接集成
 
 ```
         PictureSelectorManager.builder()
@@ -16,8 +16,9 @@ compile 'com.yinzihao:PictureSelector:{latest_version}'
 ```
 
 使用 Builder 模式传入需要自定义的参数，调用 `start()` 方法跳转到框架中的图片选择 Activity。
-**注意:读取相册需要 `READ_EXTERNAL_STORAGE` 权限，调用时需自行考虑 Android 6.0 权限问题。
+**注意:读取相册需要 `READ_EXTERNAL_STORAGE` 权限，调用时需自行考虑 Android 6.0 权限问题。**
 
+在 `onActivityResult()` 中获取结果。
 ```
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -34,9 +35,8 @@ compile 'com.yinzihao:PictureSelector:{latest_version}'
         }
     }
 ```
-在 `onActivityResult()` 中获取结果。
 
-##自定义数据结果展示
+## 自定义数据结果展示
 
 如果你不想使用框架中的图片选择 Activity ，可直接使用框架更内部的 `PictureLoaderCallback` 来自行获取数据显示。
 
