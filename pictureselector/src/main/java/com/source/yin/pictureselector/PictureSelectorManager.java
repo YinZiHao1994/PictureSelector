@@ -48,29 +48,29 @@ public class PictureSelectorManager {
             return this;
         }
 
-        public void start(Context packageContext, Activity activity) {
+        public void start(Context packageContext, Activity activityForResult) {
             if (isHaveReadExternalPermission(packageContext)) {
                 Intent intent = getIntent(packageContext);
-                activity.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
+                activityForResult.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
             } else {
                 showNoReadExternalPermissionMessage(packageContext);
             }
         }
 
 
-        public void start(Context packageContext, Fragment fragment) {
+        public void start(Context packageContext, Fragment fragmentForResult) {
             if (isHaveReadExternalPermission(packageContext)) {
                 Intent intent = getIntent(packageContext);
-                fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
+                fragmentForResult.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
             } else {
                 showNoReadExternalPermissionMessage(packageContext);
             }
         }
 
-        public void start(Context packageContext, android.app.Fragment fragment) {
+        public void start(Context packageContext, android.app.Fragment fragmentForResult) {
             if (isHaveReadExternalPermission(packageContext)) {
                 Intent intent = getIntent(packageContext);
-                fragment.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
+                fragmentForResult.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
             } else {
                 showNoReadExternalPermissionMessage(packageContext);
             }

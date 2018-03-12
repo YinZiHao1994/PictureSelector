@@ -2,6 +2,7 @@ package com.source.yin.pictureselectorsample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.source.yin.pictureselector.ui.activity.PictureSelectorActivity;
 import com.source.yin.pictureselector.utils.ImageUtils;
 import com.source.yin.yinadapter.BaseAdapter;
 import com.source.yin.yinadapter.CommonViewHolder;
+import com.source.yin.yinandroidutils.PermissionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BaseAdapter<String> adapter;
     private List<String> imagePathList;
     private int maxImageCount = 9;
+
+    private PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +79,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void selectPicture(int selectCount) {
-        PictureSelectorManager.builder()
-                .maxSelectPictureNum(selectCount)
-                .recyclerViewSpanCount(3)
-                .start(getApplicationContext(), this);
+    public void selectPicture(final int selectCount) {
+        permissionManager = new PermissionManager(this, new PermissionManager.PermissionResultCallBack() {
+            @Override
+            public void onPermissionGranted(String permission) {
+                PictureSelectorManager.builder()
+                        .maxSelectPictureNum(selectCount)//做多可选中的图片数量限制
+                        .recyclerViewSpanCount(3)//供选择的图片列表的显示列数
+                        .start(getApplicationContext(), MainActivity.this);
+            }
+
+            @Override
+            public void onPermissionDenied(String permission) {
+
+            }
+
+            @Override
+            public void shouldShowRequestPermissionRationale(String permission) {
+
+            }
+        });
+        permissionManager.readExternalStorage();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

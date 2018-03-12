@@ -28,5 +28,6 @@ dependencies {
 
     implementation 'com.yinzihao:YinAdapter:2.2.1'
     implementation 'com.yinzihao:YinImageView:2.0.2'
+    implementation 'com.yinzihao:YinAndroidUtils:1.6.1'
 
 }

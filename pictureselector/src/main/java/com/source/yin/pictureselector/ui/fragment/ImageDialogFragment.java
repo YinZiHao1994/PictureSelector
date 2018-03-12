@@ -54,10 +54,10 @@ public class ImageDialogFragment extends DialogFragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        View inflate = inflater.inflate(R.layout.image_dialog_fragment, container);
-        cancelLayout = inflate.findViewById(R.id.cancel_layout);
-        imageView = inflate.findViewById(R.id.image);
-        btnSure = inflate.findViewById(R.id.btn_sure);
+        View view = inflater.inflate(R.layout.picture_selector_image_dialog_fragment, container);
+        cancelLayout = view.findViewById(R.id.cancel_layout);
+        imageView = view.findViewById(R.id.image);
+        btnSure = view.findViewById(R.id.btn_sure);
 
         cancelLayout.setOnClickListener(this);
         imageView.setOnClickListener(this);
@@ -73,7 +73,7 @@ public class ImageDialogFragment extends DialogFragment implements View.OnClickL
                 }
             }
         }
-        return inflate;
+        return view;
     }
 
     @Override
