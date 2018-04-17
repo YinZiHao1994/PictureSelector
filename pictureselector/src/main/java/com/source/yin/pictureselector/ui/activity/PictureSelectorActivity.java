@@ -148,7 +148,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 Bitmap bitmap = ImageUtils.decodeBitmapFromFileAutoSimaple(data.getPath());
                 showInDialogPicture = data;
                 imageDialogFragment = ImageDialogFragment.instance(bitmap);
-                imageDialogFragment.setFragmentListener(PictureSelectorActivity.this);
+//                imageDialogFragment.setFragmentListener(PictureSelectorActivity.this);
                 imageDialogFragment.show(getSupportFragmentManager(), "dialog");
             }
 

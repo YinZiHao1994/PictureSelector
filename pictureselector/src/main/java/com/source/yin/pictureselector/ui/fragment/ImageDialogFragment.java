@@ -99,4 +99,10 @@ public class ImageDialogFragment extends DialogFragment implements View.OnClickL
     public void setFragmentListener(FragmentListener fragmentListener) {
         this.fragmentListener = fragmentListener;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        fragmentListener = null;
+    }
 }
