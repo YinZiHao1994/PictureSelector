@@ -56,12 +56,15 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
     private int maxSelectPictureNum;
     //是否包含 gif 图片
     private boolean isContainGif;
+    //预览图宽度，将根据此值进行压缩显示
+    private int previewImageWidth = 150;
 
     private Picture showInDialogPicture;
 
     public static final String MAX_SELECT_PICTURE_NUM_KEY = "maxSelectPictureNum";
     public static final String IS_CONTAIN_GIF_KEY = "isContainGifKey";
     public static final String RECYCLER_VIEW_SPAN_COUNT_KEY = "recyclerViewSpanCountKey";
+    public static final String PREVIEW_IMAGE_WIDTH_KEY = "previewImageWidthKey";
 
     public static final String SELECTED_PICTURE_LIST_KEY = "selectPictureListKey";
 
@@ -88,6 +91,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
         maxSelectPictureNum = getIntent().getIntExtra(MAX_SELECT_PICTURE_NUM_KEY, 9);
         isContainGif = getIntent().getBooleanExtra(IS_CONTAIN_GIF_KEY, false);
         recyclerViewSpanCount = getIntent().getIntExtra(RECYCLER_VIEW_SPAN_COUNT_KEY, 4);
+        previewImageWidth = getIntent().getIntExtra(PREVIEW_IMAGE_WIDTH_KEY, previewImageWidth);
 
         initAdapter();
         initPictureData();
@@ -107,7 +111,8 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 ImageView image = viewHolder.getView(R.id.image);
                 Bitmap bitmap = data.getCoverBitmap();
                 if (bitmap == null) {
-                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getCoverPath());
+//                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getCoverPath());
+                    bitmap = ImageUtils.compressImageFileByWidth(data.getCoverPath(),previewImageWidth);
                 }
                 data.setCoverBitmap(bitmap);
                 image.setImageBitmap(bitmap);
@@ -137,7 +142,8 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 checkBox.setChecked(data.isChecked());
                 Bitmap bitmap = data.getPreviewBitmap();
                 if (bitmap == null) {
-                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getPath());
+//                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getPath());
+                    bitmap = ImageUtils.compressImageFileByWidth(data.getPath(),previewImageWidth);
                     data.setPreviewBitmap(bitmap);
                 }
                 imageView.setImageBitmap(bitmap);
@@ -145,7 +151,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onItemClick(CommonViewHolder commonViewHolder, View view, Picture data, int position) {
-                Bitmap bitmap = ImageUtils.decodeBitmapFromFileAutoSimaple(data.getPath());
+                Bitmap bitmap = ImageUtils.decodeBitmapFromFileAutoSimple(data.getPath());
                 showInDialogPicture = data;
                 imageDialogFragment = ImageDialogFragment.instance(bitmap);
 //                imageDialogFragment.setFragmentListener(PictureSelectorActivity.this);

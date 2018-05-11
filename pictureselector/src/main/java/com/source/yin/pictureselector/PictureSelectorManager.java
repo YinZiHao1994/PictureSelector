@@ -29,6 +29,16 @@ public class PictureSelectorManager {
         private int maxSelectPictureNum = 9;
         private boolean isContainGif = false;
         private int recyclerViewSpanCount = 4;
+        private int previewImageWidth = 150;
+
+
+        public PictureSelectorManagerBuilder previewImageWidth(int previewImageWidth) {
+            if (previewImageWidth < 0) {
+                previewImageWidth = 1;
+            }
+            this.previewImageWidth = previewImageWidth;
+            return this;
+        }
 
         public PictureSelectorManagerBuilder maxSelectPictureNum(int maxSelectPictureNum) {
             if (maxSelectPictureNum < 0) {
@@ -99,6 +109,7 @@ public class PictureSelectorManager {
             intent.putExtra(PictureSelectorActivity.IS_CONTAIN_GIF_KEY, isContainGif);
             intent.putExtra(PictureSelectorActivity.MAX_SELECT_PICTURE_NUM_KEY, maxSelectPictureNum);
             intent.putExtra(PictureSelectorActivity.RECYCLER_VIEW_SPAN_COUNT_KEY, recyclerViewSpanCount);
+            intent.putExtra(PictureSelectorActivity.PREVIEW_IMAGE_WIDTH_KEY, previewImageWidth);
             return intent;
         }
     }

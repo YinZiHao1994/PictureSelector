@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataBind(CommonViewHolder viewHolder, String data, int position) {
                 ImageView imageView = viewHolder.getImageView(R.id.image);
-                imageView.setImageBitmap(ImageUtils.decodeBitmapFromFileForPreview(data));
+//                imageView.setImageBitmap(ImageUtils.decodeBitmapFromFileForPreview(data));
+                imageView.setImageBitmap(ImageUtils.compressImageFileByWidth(data, 200));
             }
 
             @Override
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onPermissionGranted(String permission) {
                 PictureSelectorManager.builder()
                         .maxSelectPictureNum(selectCount)//做多可选中的图片数量限制
-                        .recyclerViewSpanCount(3)//供选择的图片列表的显示列数
+                        .recyclerViewSpanCount(4)//供选择的图片列表的显示列数
+                        .previewImageWidth(100)
                         .start(getApplicationContext(), MainActivity.this);
             }
 
