@@ -27,7 +27,7 @@ dependencies {
     implementation project(':pictureselector')
 
     implementation 'com.yinzihao:YinAdapter:2.2.1'
-    implementation 'com.yinzihao:YinImageView:2.0.3'
+    implementation 'com.yinzihao:YinImageView:2.1.0'
     implementation 'com.yinzihao:YinAndroidUtils:1.6.1'
 
 }

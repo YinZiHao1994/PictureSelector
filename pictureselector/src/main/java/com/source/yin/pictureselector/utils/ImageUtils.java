@@ -2,7 +2,6 @@ package com.source.yin.pictureselector.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,7 +39,7 @@ public class ImageUtils {
             inSampleSize = outWidth / targetWidth;
         }
         bitmap = decodeSampledBitmapFromFile(imageFile.getPath(), inSampleSize);
-        Log.d("yzh", "before compress image outWidth  = " + outWidth + "\ninSampleSize = " + inSampleSize);
+//        Log.d("yzh", "before compress image outWidth  = " + outWidth + "\ninSampleSize = " + inSampleSize);
         return bitmap;
     }
 
