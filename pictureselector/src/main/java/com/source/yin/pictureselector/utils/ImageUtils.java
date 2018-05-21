@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by yin on 2018/3/1.
@@ -12,10 +14,11 @@ import java.io.File;
 
 public class ImageUtils {
 
+    private static ExecutorService executor;
 
-    public static Bitmap compressImageFileByWidth(String imageFilePath, int targetWidth) {
+    public static void compressImageFileByWidth(String imageFilePath, int targetWidth, BitmapCallback bitmapCallback) {
         File file = new File(imageFilePath);
-        return compressImageFileByWidth(file, targetWidth);
+        compressImageFileByWidth(file, targetWidth, bitmapCallback);
     }
 
     /**
@@ -23,11 +26,14 @@ public class ImageUtils {
      *
      * @param imageFile
      * @param targetWidth
+     * @param bitmapCallback
      */
-    public static Bitmap compressImageFileByWidth(File imageFile, int targetWidth) {
-        Bitmap bitmap = null;
+    public static void compressImageFileByWidth(File imageFile, int targetWidth, BitmapCallback bitmapCallback) {
         if (imageFile == null) {
-            return bitmap;
+            if (bitmapCallback != null) {
+                bitmapCallback.onSuccess(null);
+            }
+            return;
         }
         if (targetWidth <= 0) {
             targetWidth = 1;
@@ -38,9 +44,8 @@ public class ImageUtils {
         if (outWidth > targetWidth) {
             inSampleSize = outWidth / targetWidth;
         }
-        bitmap = decodeSampledBitmapFromFile(imageFile.getPath(), inSampleSize);
+        decodeSampledBitmapFromFile(imageFile.getPath(), inSampleSize, bitmapCallback);
 //        Log.d("yzh", "before compress image outWidth  = " + outWidth + "\ninSampleSize = " + inSampleSize);
-        return bitmap;
     }
 
     /**
@@ -58,51 +63,78 @@ public class ImageUtils {
     /**
      * 解析并压缩图片
      *
-     * @param inSampleSize 缩小的倍数，例如 2 ，则宽高都压缩为原来的 1/2
+     * @param inSampleSize   缩小的倍数，例如 2 ，则宽高都压缩为原来的 1/2
+     * @param bitmapCallback
      * @return
      */
-    public static Bitmap decodeSampledBitmapFromFile(String filePath, int inSampleSize) {
+    public static void decodeSampledBitmapFromFile(final String filePath, final int inSampleSize, final BitmapCallback bitmapCallback) {
+        if (executor == null) {
+            executor = Executors.newFixedThreadPool(20);
+        }
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // 设置inJustDecodeBounds = true ,表示获取图像信息，但是不将图像的像素加入内存
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                // 压缩比例
+                options.inSampleSize = inSampleSize;
+                //将options.inPreferredConfig改成Bitmap.Config.RGB_565，
+                // 是默认情况Bitmap.Config.ARGB_8888占用内存的一半
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+                if (bitmapCallback != null) {
+                    bitmapCallback.onSuccess(bitmap);
+                }
+            }
+        });
+//        // 设置inJustDecodeBounds = true ,表示获取图像信息，但是不将图像的像素加入内存
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        // 压缩比例
+//        options.inSampleSize = inSampleSize;
+//        //将options.inPreferredConfig改成Bitmap.Config.RGB_565，
+//        // 是默认情况Bitmap.Config.ARGB_8888占用内存的一半
+//        options.inPreferredConfig = Bitmap.Config.RGB_565;
+//        return BitmapFactory.decodeFile(filePath, options);
+    }
 
-        // 设置inJustDecodeBounds = true ,表示获取图像信息，但是不将图像的像素加入内存
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        // 压缩比例
-        options.inSampleSize = inSampleSize;
-        //将options.inPreferredConfig改成Bitmap.Config.RGB_565，
-        // 是默认情况Bitmap.Config.ARGB_8888占用内存的一半
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        return BitmapFactory.decodeFile(filePath, options);
+    public interface BitmapCallback {
+        void onSuccess(Bitmap bitmap);
+
+        void onFail(String text);
     }
 
     /**
      * 自动压缩图片为缩略图
      *
      * @param filePath
+     * @param bitmapCallback
      * @return
      */
-    public static Bitmap decodeBitmapFromFileForPreview(String filePath) {
+    public static void decodeBitmapFromFileForPreview(String filePath, BitmapCallback bitmapCallback) {
         File imageFile = new File(filePath);
         long mb = imageFile.length() / 1024 / 1024;
         int sampleSize = 4;
         if (mb > 0) {
             sampleSize = (int) (sampleSize * mb);
         }
-        return decodeSampledBitmapFromFile(filePath, sampleSize);
+        decodeSampledBitmapFromFile(filePath, sampleSize, bitmapCallback);
     }
 
     /**
      * 避免过大图片内存溢出
      *
      * @param filePath
+     * @param bitmapCallback
      * @return
      */
-    public static Bitmap decodeBitmapFromFileAutoSimple(String filePath) {
+    public static void decodeBitmapFromFileAutoSimple(String filePath, BitmapCallback bitmapCallback) {
         File imageFile = new File(filePath);
         long mb = imageFile.length() / 1024 / 1024;
         int sampleSize = 1;
         if (mb > 1) {
             sampleSize = (int) (sampleSize * mb);
         }
-        return decodeSampledBitmapFromFile(filePath, sampleSize);
+        decodeSampledBitmapFromFile(filePath, sampleSize, bitmapCallback);
     }
 
     /**

@@ -106,17 +106,35 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
         directoryPopupWindow.setDropDownGravity(Gravity.BOTTOM);
         pictureDirectoryPopupListWindowAdapter = new PopupListWindowAdapter<PictureDirectory>(pictureDirectories, R.layout.directory_popup_list_item) {
             @Override
-            public void onDataBind(ViewHolder viewHolder, PictureDirectory data) {
-                TextView tvDirectoryName = viewHolder.getView(R.id.tv_directory_name);
-                ImageView image = viewHolder.getView(R.id.image);
+            public void onDataBind(ViewHolder viewHolder, final PictureDirectory data) {
+                final TextView tvDirectoryName = viewHolder.getView(R.id.tv_directory_name);
+                final ImageView image = viewHolder.getView(R.id.image);
                 Bitmap bitmap = data.getCoverBitmap();
                 if (bitmap == null) {
 //                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getCoverPath());
-                    bitmap = ImageUtils.compressImageFileByWidth(data.getCoverPath(),previewImageWidth);
+                    ImageUtils.compressImageFileByWidth(data.getCoverPath(), previewImageWidth, new ImageUtils.BitmapCallback() {
+                        @Override
+                        public void onSuccess(final Bitmap bitmap) {
+                            data.setCoverBitmap(bitmap);
+                            image.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    image.setImageBitmap(bitmap);
+                                }
+                            });
+                            tvDirectoryName.setText(data.getName());
+                        }
+
+                        @Override
+                        public void onFail(String text) {
+
+                        }
+                    });
+                } else {
+                    image.setImageBitmap(bitmap);
+                    tvDirectoryName.setText(data.getName());
                 }
-                data.setCoverBitmap(bitmap);
-                image.setImageBitmap(bitmap);
-                tvDirectoryName.setText(data.getName());
+
             }
         };
         directoryPopupWindow.setAdapter(pictureDirectoryPopupListWindowAdapter);
@@ -134,8 +152,8 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
         pictureList = new ArrayList<>();
         pictureAdapter = new BaseAdapter<Picture>(getApplicationContext(), pictureList, R.layout.picture_selector_list_item) {
             @Override
-            public void onDataBind(CommonViewHolder viewHolder, Picture data, int position) {
-                ImageView imageView = viewHolder.getImageView(R.id.image);
+            public void onDataBind(CommonViewHolder viewHolder, final Picture data, int position) {
+                final ImageView imageView = viewHolder.getImageView(R.id.image);
                 CheckBox checkBox = viewHolder.getView(R.id.check_box);
                 checkBox.setOnCheckedChangeListener(new ImageCheckBoxListener(data, position));
 
@@ -143,19 +161,45 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 Bitmap bitmap = data.getPreviewBitmap();
                 if (bitmap == null) {
 //                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getPath());
-                    bitmap = ImageUtils.compressImageFileByWidth(data.getPath(),previewImageWidth);
-                    data.setPreviewBitmap(bitmap);
+                    ImageUtils.compressImageFileByWidth(data.getPath(), previewImageWidth, new ImageUtils.BitmapCallback() {
+                        @Override
+                        public void onSuccess(final Bitmap bitmap) {
+                            data.setPreviewBitmap(bitmap);
+                            imageView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    imageView.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFail(String text) {
+
+                        }
+                    });
+                } else {
+                    imageView.setImageBitmap(bitmap);
                 }
-                imageView.setImageBitmap(bitmap);
             }
 
             @Override
-            public void onItemClick(CommonViewHolder commonViewHolder, View view, Picture data, int position) {
-                Bitmap bitmap = ImageUtils.decodeBitmapFromFileAutoSimple(data.getPath());
-                showInDialogPicture = data;
-                imageDialogFragment = ImageDialogFragment.instance(bitmap);
+            public void onItemClick(CommonViewHolder commonViewHolder, View view, final Picture data, int position) {
+                ImageUtils.decodeBitmapFromFileAutoSimple(data.getPath(), new ImageUtils.BitmapCallback() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        showInDialogPicture = data;
+                        imageDialogFragment = ImageDialogFragment.instance(bitmap);
 //                imageDialogFragment.setFragmentListener(PictureSelectorActivity.this);
-                imageDialogFragment.show(getSupportFragmentManager(), "dialog");
+                        imageDialogFragment.show(getSupportFragmentManager(), "dialog");
+                    }
+
+                    @Override
+                    public void onFail(String text) {
+
+                    }
+                });
+
             }
 
             @Override

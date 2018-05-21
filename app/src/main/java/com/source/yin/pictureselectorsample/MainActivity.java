@@ -1,6 +1,7 @@
 package com.source.yin.pictureselectorsample;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +52,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapter = new BaseAdapter<String>(getApplicationContext(), imagePathList, R.layout.picture_list_item) {
             @Override
             public void onDataBind(CommonViewHolder viewHolder, String data, int position) {
-                ImageView imageView = viewHolder.getImageView(R.id.image);
+                final ImageView imageView = viewHolder.getImageView(R.id.image);
 //                imageView.setImageBitmap(ImageUtils.decodeBitmapFromFileForPreview(data));
-                imageView.setImageBitmap(ImageUtils.compressImageFileByWidth(data, 200));
+                ImageUtils.compressImageFileByWidth(data, 200, new ImageUtils.BitmapCallback() {
+                    @Override
+                    public void onSuccess(final Bitmap bitmap) {
+                        imageView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setImageBitmap(bitmap);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFail(String text) {
+
+                    }
+                });
             }
 
             @Override
