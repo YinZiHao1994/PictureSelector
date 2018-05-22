@@ -2,10 +2,13 @@ package com.source.yin.pictureselector.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.AsyncTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by yin on 2018/3/1.
@@ -114,7 +117,13 @@ public class ImageUtils {
             }
             BitmapFactory.Options options = decodeImageParam.getOptions();
             String filePath = decodeImageParam.getFilePath();
-            return BitmapFactory.decodeFile(filePath, options);
+            //部分机型图片被旋转，进行校正
+            int bitmapRotateAngle = getBitmapRotateAngle(filePath);
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+            if (bitmapRotateAngle != 0) {
+                bitmap = rotateBitmap(bitmap, bitmapRotateAngle);
+            }
+            return bitmap;
         }
 
         @Override
@@ -194,6 +203,58 @@ public class ImageUtils {
         }
 
         return result;
+    }
+
+
+    /**
+     * 将图片按照指定的角度进行旋转
+     *
+     * @param bitmap 需要旋转的图片
+     * @param degree 指定的旋转角度
+     * @return 旋转后的图片
+     */
+    public static Bitmap rotateBitmap(Bitmap bitmap, int degree) {
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return bitmap;
+    }
+
+    /**
+     * 获取图片的旋转角度
+     *
+     * @param imgPath
+     * @return
+     */
+    public static int getBitmapRotateAngle(String imgPath) {
+        // 判断图片方向
+        int degree = 0;
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imgPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (exif != null) {
+            int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            switch (ori) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+                default:
+                    degree = 0;
+                    break;
+            }
+        }
+        return degree;
     }
 
 }
