@@ -2,11 +2,10 @@ package com.source.yin.pictureselector.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by yin on 2018/3/1.
@@ -14,7 +13,6 @@ import java.util.concurrent.Executors;
 
 public class ImageUtils {
 
-    private static ExecutorService executor;
 
     public static void compressImageFileByWidth(String imageFilePath, int targetWidth, BitmapCallback bitmapCallback) {
         File file = new File(imageFilePath);
@@ -67,34 +65,73 @@ public class ImageUtils {
      * @param bitmapCallback
      * @return
      */
-    public static void decodeSampledBitmapFromFile(final String filePath, final int inSampleSize, final BitmapCallback bitmapCallback) {
-        if (executor == null) {
-            executor = Executors.newFixedThreadPool(20);
+    public static void decodeSampledBitmapFromFile(String filePath, int inSampleSize, BitmapCallback bitmapCallback) {
+//         设置inJustDecodeBounds = true ,表示获取图像信息，但是不将图像的像素加入内存
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        // 压缩比例
+        options.inSampleSize = inSampleSize;
+        //将options.inPreferredConfig改成Bitmap.Config.RGB_565，
+        // 是默认情况Bitmap.Config.ARGB_8888占用内存的一半
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        DecodeImageParam decodeImageParam = new DecodeImageParam(filePath, options);
+
+        DecodeImageAsyncTask decodeImageAsyncTask = new DecodeImageAsyncTask(bitmapCallback);
+        decodeImageAsyncTask.execute(decodeImageParam);
+    }
+
+
+    private static class DecodeImageParam {
+        private String filePath;
+        private BitmapFactory.Options options;
+
+        DecodeImageParam(String filePath, BitmapFactory.Options options) {
+            this.filePath = filePath;
+            this.options = options;
         }
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                // 设置inJustDecodeBounds = true ,表示获取图像信息，但是不将图像的像素加入内存
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                // 压缩比例
-                options.inSampleSize = inSampleSize;
-                //将options.inPreferredConfig改成Bitmap.Config.RGB_565，
-                // 是默认情况Bitmap.Config.ARGB_8888占用内存的一半
-                options.inPreferredConfig = Bitmap.Config.RGB_565;
-                Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
-                if (bitmapCallback != null) {
-                    bitmapCallback.onSuccess(bitmap);
-                }
+
+        public String getFilePath() {
+            return filePath;
+        }
+
+        public BitmapFactory.Options getOptions() {
+            return options;
+        }
+    }
+
+    private static class DecodeImageAsyncTask extends AsyncTask<DecodeImageParam, Integer, Bitmap> {
+
+        private BitmapCallback bitmapCallback;
+
+        DecodeImageAsyncTask(BitmapCallback bitmapCallback) {
+            this.bitmapCallback = bitmapCallback;
+        }
+
+        @Override
+        protected Bitmap doInBackground(DecodeImageParam... decodeImageParams) {
+            DecodeImageParam decodeImageParam = decodeImageParams[0];
+            if (decodeImageParam == null) {
+                return null;
             }
-        });
-//        // 设置inJustDecodeBounds = true ,表示获取图像信息，但是不将图像的像素加入内存
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        // 压缩比例
-//        options.inSampleSize = inSampleSize;
-//        //将options.inPreferredConfig改成Bitmap.Config.RGB_565，
-//        // 是默认情况Bitmap.Config.ARGB_8888占用内存的一半
-//        options.inPreferredConfig = Bitmap.Config.RGB_565;
-//        return BitmapFactory.decodeFile(filePath, options);
+            BitmapFactory.Options options = decodeImageParam.getOptions();
+            String filePath = decodeImageParam.getFilePath();
+            return BitmapFactory.decodeFile(filePath, options);
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if (bitmapCallback != null) {
+                bitmapCallback.onSuccess(bitmap);
+            }
+        }
+
+        @Override
+        protected void onCancelled(Bitmap bitmap) {
+            super.onCancelled(bitmap);
+            if (bitmapCallback != null) {
+                bitmapCallback.onSuccess(bitmap);
+            }
+        }
     }
 
     public interface BitmapCallback {

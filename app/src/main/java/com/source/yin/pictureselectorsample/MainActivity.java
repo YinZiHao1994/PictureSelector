@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 PictureSelectorManager.builder()
                         .maxSelectPictureNum(selectCount)//做多可选中的图片数量限制
                         .recyclerViewSpanCount(4)//供选择的图片列表的显示列数
-                        .previewImageWidth(100)
+                        .previewImageWidth(150)
                         .start(getApplicationContext(), MainActivity.this);
             }
 

@@ -29,7 +29,7 @@ public class PictureSelectorManager {
         private int maxSelectPictureNum = 9;
         private boolean isContainGif = false;
         private int recyclerViewSpanCount = 4;
-        private int previewImageWidth = 150;
+        private int previewImageWidth = 200;
 
 
         public PictureSelectorManagerBuilder previewImageWidth(int previewImageWidth) {

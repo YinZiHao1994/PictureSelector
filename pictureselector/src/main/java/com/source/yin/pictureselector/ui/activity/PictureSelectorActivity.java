@@ -57,7 +57,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
     //是否包含 gif 图片
     private boolean isContainGif;
     //预览图宽度，将根据此值进行压缩显示
-    private int previewImageWidth = 150;
+    private int previewImageWidth = 200;
 
     private Picture showInDialogPicture;
 
@@ -116,12 +116,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                         @Override
                         public void onSuccess(final Bitmap bitmap) {
                             data.setCoverBitmap(bitmap);
-                            image.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    image.setImageBitmap(bitmap);
-                                }
-                            });
+                            image.setImageBitmap(bitmap);
                             tvDirectoryName.setText(data.getName());
                         }
 
@@ -160,17 +155,12 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 checkBox.setChecked(data.isChecked());
                 Bitmap bitmap = data.getPreviewBitmap();
                 if (bitmap == null) {
-//                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getPath());
+//                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getFilePath());
                     ImageUtils.compressImageFileByWidth(data.getPath(), previewImageWidth, new ImageUtils.BitmapCallback() {
                         @Override
                         public void onSuccess(final Bitmap bitmap) {
                             data.setPreviewBitmap(bitmap);
-                            imageView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    imageView.setImageBitmap(bitmap);
-                                }
-                            });
+                            imageView.setImageBitmap(bitmap);
                         }
 
                         @Override
