@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/light_cyan_black" />
+    <solid android:color="@color/picture_selector_light_cyan_black" />
     <size
         android:width="10dp"
         android:height="5dp" />

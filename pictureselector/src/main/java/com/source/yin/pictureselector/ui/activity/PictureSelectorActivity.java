@@ -151,7 +151,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 final ImageView imageView = viewHolder.getImageView(R.id.image);
                 CheckBox checkBox = viewHolder.getView(R.id.check_box);
                 checkBox.setOnCheckedChangeListener(new ImageCheckBoxListener(data, position));
-                imageView.setImageResource(R.drawable.svg_image);
+                imageView.setImageResource(R.drawable.picture_selector_svg_image);
                 imageView.setTag(data.getPath());
                 checkBox.setChecked(data.isChecked());
                 Bitmap bitmap = data.getPreviewBitmap();
@@ -269,7 +269,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
         int showDirectoryCount = pictureDirectoryPopupListWindowAdapter.getCount();
         showDirectoryCount = showDirectoryCount < 4 ? showDirectoryCount : 4;
         if (directoryPopupWindow != null) {
-            directoryPopupWindow.setHeight(showDirectoryCount * getResources().getDimensionPixelOffset(R.dimen.directory_popup_window_item_height));
+            directoryPopupWindow.setHeight(showDirectoryCount * getResources().getDimensionPixelOffset(R.dimen.picture_selector_directory_popup_window_item_height));
         }
     }
 
@@ -318,11 +318,8 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
     private void selectedPictureListChange(int currentSize) {
         if (currentSize > 0) {
             btnSure.setEnabled(true);
-            //todo 作为库使用的时候 selector 形式设置 color enable 状态下不起作用，只能先通过手动变换颜色的方法实现。可能是文件命名重复引起
-            btnSure.setTextColor(getResources().getColor(R.color.light_gray));
             btnSure.setText(getString(R.string.btn_selected_picture, currentSize, maxSelectPictureNum));
         } else {
-            btnSure.setTextColor(getResources().getColor(R.color.cyan_gray));
             btnSure.setEnabled(false);
             btnSure.setText(getString(R.string.btn_text));
         }

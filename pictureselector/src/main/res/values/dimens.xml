@@ -2,8 +2,8 @@
 <resources>
 
 
-    <dimen name="common_text_size">16sp</dimen>
-    <dimen name="directory_popup_window_item_height">80dp</dimen>
+    <dimen name="picture_selector_common_text_size">16sp</dimen>
+    <dimen name="picture_selector_directory_popup_window_item_height">80dp</dimen>
 
 
 </resources>

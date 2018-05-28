@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:background="@color/alpha_black">
+    android:background="@color/picture_selector_alpha_black">
 
 
     <com.source.yin.yinimageview.SquareImageView

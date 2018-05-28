@@ -9,8 +9,8 @@
     <style name="CommonTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/common_text_color</item>
-        <item name="android:textSize">@dimen/common_text_size</item>
+        <item name="android:textColor">@color/picture_selector_common_text_color</item>
+        <item name="android:textSize">@dimen/picture_selector_common_text_size</item>
     </style>
 
     <style name="Dialog.FullScreen" parent="Theme.AppCompat.Dialog">

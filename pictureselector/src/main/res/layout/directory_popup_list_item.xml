@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/directory_popup_window_item_height"
+    android:layout_height="@dimen/picture_selector_directory_popup_window_item_height"
     android:layout_margin="5dp"
-    android:background="@color/alpha_black"
+    android:background="@color/picture_selector_alpha_black"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="5dp">
