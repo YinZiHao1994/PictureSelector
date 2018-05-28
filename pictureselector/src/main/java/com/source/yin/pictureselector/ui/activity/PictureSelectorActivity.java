@@ -151,7 +151,8 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 final ImageView imageView = viewHolder.getImageView(R.id.image);
                 CheckBox checkBox = viewHolder.getView(R.id.check_box);
                 checkBox.setOnCheckedChangeListener(new ImageCheckBoxListener(data, position));
-
+                imageView.setImageResource(R.drawable.svg_image);
+                imageView.setTag(data.getPath());
                 checkBox.setChecked(data.isChecked());
                 Bitmap bitmap = data.getPreviewBitmap();
                 if (bitmap == null) {
@@ -160,7 +161,10 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                         @Override
                         public void onSuccess(final Bitmap bitmap) {
                             data.setPreviewBitmap(bitmap);
-                            imageView.setImageBitmap(bitmap);
+                            //避免图片错位
+                            if (data.getPath() != null && imageView.getTag().equals(data.getPath())) {
+                                imageView.setImageBitmap(bitmap);
+                            }
                         }
 
                         @Override
