@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/tv_directory_name"
-        style="@style/CommonTextView"
+        style="@style/PictureSelectorCommonTextView"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp" />
 

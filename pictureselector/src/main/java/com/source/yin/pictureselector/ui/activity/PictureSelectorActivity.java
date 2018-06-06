@@ -179,21 +179,10 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onItemClick(CommonViewHolder commonViewHolder, View view, final Picture data, int position) {
-                ImageUtils.decodeBitmapFromFileAutoSimple(data.getPath(), new ImageUtils.BitmapCallback() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        showInDialogPicture = data;
-                        imageDialogFragment = ImageDialogFragment.instance(bitmap);
-//                imageDialogFragment.setFragmentListener(PictureSelectorActivity.this);
-                        imageDialogFragment.show(getSupportFragmentManager(), "dialog");
-                    }
-
-                    @Override
-                    public void onFail(String text) {
-
-                    }
-                });
-
+                showInDialogPicture = data;
+                String path = data.getPath();
+                imageDialogFragment = ImageDialogFragment.instance(path);
+                imageDialogFragment.show(getSupportFragmentManager(), ImageDialogFragment.class.getSimpleName());
             }
 
             @Override

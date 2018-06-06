@@ -28,7 +28,7 @@
                 android:src="@drawable/picture_selector_svg_left" />
 
             <TextView
-                style="@style/CommonTextView"
+                style="@style/PictureSelectorCommonTextView"
                 android:text="返回" />
         </LinearLayout>
 

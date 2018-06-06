@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.source.yin.pictureselector.FragmentListener;
 import com.source.yin.pictureselector.R;
@@ -29,7 +31,8 @@ public class ImageDialogFragment extends DialogFragment implements View.OnClickL
     private ImageView imageView;
 
     private FragmentListener fragmentListener;
-    private static final String IMAGE_BYTE = "bitmap";
+    private static final String IMAGE_BYTE = "bitmapByte";
+    private static final String IMAGE_FILE_PATH = "imageFilePath";
     public static final int MESSAGE_WHAT_SURE = 1011;
 
 
@@ -40,6 +43,14 @@ public class ImageDialogFragment extends DialogFragment implements View.OnClickL
             byte[] bitmapBytes = ImageUtils.bmpToByteArray(bitmap);
             bundle.putByteArray(IMAGE_BYTE, bitmapBytes);
         }
+        imageDialogFragment.setArguments(bundle);
+        return imageDialogFragment;
+    }
+
+    public static ImageDialogFragment instance(String imageFilePath) {
+        ImageDialogFragment imageDialogFragment = new ImageDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(IMAGE_FILE_PATH, imageFilePath);
         imageDialogFragment.setArguments(bundle);
         return imageDialogFragment;
     }
@@ -66,7 +77,20 @@ public class ImageDialogFragment extends DialogFragment implements View.OnClickL
         Bundle arguments = getArguments();
         if (arguments != null) {
             byte[] byteArray = arguments.getByteArray(IMAGE_BYTE);
-            if (byteArray != null) {
+            String imageFilePath = arguments.getString(IMAGE_FILE_PATH);
+            if (!TextUtils.isEmpty(imageFilePath)) {
+                ImageUtils.decodeBitmapFromFileAutoSimple(imageFilePath, new ImageUtils.BitmapCallback() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+
+                    @Override
+                    public void onFail(String text) {
+                        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else if (byteArray != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 if (bitmap != null) {
                     imageView.setImageBitmap(bitmap);
