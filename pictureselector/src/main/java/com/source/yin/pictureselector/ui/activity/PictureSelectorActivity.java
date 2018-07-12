@@ -12,8 +12,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +26,7 @@ import com.source.yin.pictureselector.ui.fragment.ImageDialogFragment;
 import com.source.yin.pictureselector.utils.ImageUtils;
 import com.source.yin.yinadapter.BaseAdapter;
 import com.source.yin.yinadapter.CommonViewHolder;
+import com.source.yin.yinimageview.CheckableImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,13 +146,30 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
         pictureList = new ArrayList<>();
         pictureAdapter = new BaseAdapter<Picture>(getApplicationContext(), pictureList, R.layout.picture_selector_list_item) {
             @Override
-            public void onDataBind(CommonViewHolder viewHolder, final Picture data, int position) {
+            public void onDataBind(CommonViewHolder viewHolder, final Picture data, final int position) {
                 final ImageView imageView = viewHolder.getImageView(R.id.image);
-                CheckBox checkBox = viewHolder.getView(R.id.check_box);
-                checkBox.setOnCheckedChangeListener(new ImageCheckBoxListener(data, position));
+                CheckableImageView checkMark = viewHolder.getView(R.id.check_mark);
                 imageView.setImageResource(R.drawable.picture_selector_svg_image);
                 imageView.setTag(data.getPath());
-                checkBox.setChecked(data.isChecked());
+                checkMark.setChecked(data.isChecked());
+                checkMark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!data.isChecked() && selectedPictureList.size() >= maxSelectPictureNum) {
+                            Toast.makeText(getApplicationContext(), "最多只能选择" + maxSelectPictureNum + "张图片", Toast.LENGTH_SHORT).show();
+                            //此时已经点击到了超出最大数目的选项了，手动把它再设置为未选中
+                            return;
+                        }
+                        if (!data.isChecked() && data.getPreviewBitmap() == null) {
+                            //极少数情况下，图片本身已损坏无法解析，在此限制不能选中
+                            Toast.makeText(getApplicationContext(), "此图片文件已损坏", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        data.setChecked(!data.isChecked());
+                        notifyItemChanged(position);
+                        selectedPictureListChange();
+                    }
+                });
                 Bitmap bitmap = data.getPreviewBitmap();
                 if (bitmap == null) {
 //                    bitmap = ImageUtils.decodeBitmapFromFileForPreview(data.getFilePath());
@@ -273,47 +289,20 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
 //        }
     }
 
-    private class ImageCheckBoxListener implements CompoundButton.OnCheckedChangeListener {
-
-        private Picture data;
-        private int position;
-
-        public ImageCheckBoxListener(Picture data, int position) {
-            this.data = data;
-            this.position = position;
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (isChecked && selectedPictureList.size() >= maxSelectPictureNum) {
-                Toast.makeText(getApplicationContext(), "最多只能选择" + maxSelectPictureNum + "张图片", Toast.LENGTH_SHORT).show();
-                //此时已经点击到了超出最大数目的选项了，手动把它再设置为未选中
-                buttonView.setChecked(false);
-                return;
-            }
-            if (data.getPreviewBitmap() == null) {
-                //极少数情况下，图片本身已损坏无法解析，在此限制不能选中
-                Toast.makeText(getApplicationContext(), "此图片文件已损坏", Toast.LENGTH_SHORT).show();
-                buttonView.setChecked(false);
-                return;
-            }
-            data.setChecked(isChecked);
-            if (isChecked) {
-                if (!selectedPictureList.contains(data)) {
-                    selectedPictureList.add(data);
+    private void selectedPictureListChange() {
+        selectedPictureList.clear();
+        if (pictureList != null) {
+            for (Picture picture : pictureList) {
+                if (picture.isChecked()) {
+                    selectedPictureList.add(picture);
                 }
-            } else {
-                selectedPictureList.remove(data);
             }
-            selectedPictureListChange(selectedPictureList.size());
-//            Log.d("yzh", "selectedPictureList.size() = " + selectedPictureList.size());
         }
-    }
+        int currentCheckedNum = selectedPictureList.size();
 
-    private void selectedPictureListChange(int currentSize) {
-        if (currentSize > 0) {
+        if (currentCheckedNum > 0) {
             btnSure.setEnabled(true);
-            btnSure.setText(getString(R.string.btn_selected_picture, currentSize, maxSelectPictureNum));
+            btnSure.setText(getString(R.string.btn_selected_picture, currentCheckedNum, maxSelectPictureNum));
         } else {
             btnSure.setEnabled(false);
             btnSure.setText(getString(R.string.btn_text));
