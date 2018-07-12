@@ -291,6 +291,12 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                 buttonView.setChecked(false);
                 return;
             }
+            if (data.getPreviewBitmap() == null) {
+                //极少数情况下，图片本身已损坏无法解析，在此限制不能选中
+                Toast.makeText(getApplicationContext(), "此图片文件已损坏", Toast.LENGTH_SHORT).show();
+                buttonView.setChecked(false);
+                return;
+            }
             data.setChecked(isChecked);
             if (isChecked) {
                 if (!selectedPictureList.contains(data)) {
