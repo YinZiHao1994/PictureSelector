@@ -167,7 +167,7 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
                         }
                         data.setChecked(!data.isChecked());
                         notifyItemChanged(position);
-                        selectedPictureListChange();
+                        updateCheckedDataList(data);
                     }
                 });
                 Bitmap bitmap = data.getPreviewBitmap();
@@ -289,15 +289,18 @@ public class PictureSelectorActivity extends AppCompatActivity implements View.O
 //        }
     }
 
-    private void selectedPictureListChange() {
-        selectedPictureList.clear();
-        if (pictureList != null) {
-            for (Picture picture : pictureList) {
-                if (picture.isChecked()) {
-                    selectedPictureList.add(picture);
-                }
+    public void updateCheckedDataList(Picture picture) {
+        if (picture.isChecked()) {
+            if (!selectedPictureList.contains(picture)) {
+                selectedPictureList.add(picture);
             }
+        } else {
+            selectedPictureList.remove(picture);
         }
+        selectedPictureListChange();
+    }
+
+    private void selectedPictureListChange() {
         int currentCheckedNum = selectedPictureList.size();
 
         if (currentCheckedNum > 0) {
