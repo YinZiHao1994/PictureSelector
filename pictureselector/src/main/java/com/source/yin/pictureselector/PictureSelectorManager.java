@@ -30,6 +30,7 @@ public class PictureSelectorManager {
         private boolean isContainGif = false;
         private int recyclerViewSpanCount = 4;
         private int previewImageWidth = 200;
+        private int requestCode = REQUEST_CODE_SELECT_PICTURE;
 
 
         public PictureSelectorManagerBuilder previewImageWidth(int previewImageWidth) {
@@ -58,10 +59,15 @@ public class PictureSelectorManager {
             return this;
         }
 
+        public PictureSelectorManagerBuilder requestCode(int requestCode) {
+            this.requestCode = requestCode;
+            return this;
+        }
+
         public void start(Context packageContext, Activity activityForResult) {
             if (isHaveReadExternalPermission(packageContext)) {
                 Intent intent = getIntent(packageContext);
-                activityForResult.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
+                activityForResult.startActivityForResult(intent, requestCode);
             } else {
                 showNoReadExternalPermissionMessage(packageContext);
             }
@@ -71,7 +77,7 @@ public class PictureSelectorManager {
         public void start(Context packageContext, Fragment fragmentForResult) {
             if (isHaveReadExternalPermission(packageContext)) {
                 Intent intent = getIntent(packageContext);
-                fragmentForResult.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
+                fragmentForResult.startActivityForResult(intent, requestCode);
             } else {
                 showNoReadExternalPermissionMessage(packageContext);
             }
@@ -80,7 +86,7 @@ public class PictureSelectorManager {
         public void start(Context packageContext, android.app.Fragment fragmentForResult) {
             if (isHaveReadExternalPermission(packageContext)) {
                 Intent intent = getIntent(packageContext);
-                fragmentForResult.startActivityForResult(intent, REQUEST_CODE_SELECT_PICTURE);
+                fragmentForResult.startActivityForResult(intent, requestCode);
             } else {
                 showNoReadExternalPermissionMessage(packageContext);
             }

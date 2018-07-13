@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private PermissionManager permissionManager;
 
+    public static final int MY_REQUEST_CODE = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .maxSelectPictureNum(selectCount)//做多可选中的图片数量限制
                         .recyclerViewSpanCount(4)//供选择的图片列表的显示列数
                         .previewImageWidth(150)
+                        .requestCode(MY_REQUEST_CODE)
                         .start(getApplicationContext(), MainActivity.this);
             }
 
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case PictureSelectorManager.REQUEST_CODE_SELECT_PICTURE:
+            case MY_REQUEST_CODE:
                 switch (resultCode) {
                     case RESULT_OK:
                         ArrayList<String> picturePathList = data.getStringArrayListExtra(PictureSelectorActivity.SELECTED_PICTURE_LIST_KEY);
