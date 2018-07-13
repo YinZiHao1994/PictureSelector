@@ -15,11 +15,13 @@
 
     <com.source.yin.yinimageview.CheckableImageView
         android:id="@+id/check_mark"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="2dp"
-        android:padding="2dp"
+        android:paddingLeft="18dp"
+        android:paddingStart="18dp"
+        android:paddingBottom="18dp"
         app:srcCompat="@drawable/picture_selector_selector_check_mark" />
 </RelativeLayout>
